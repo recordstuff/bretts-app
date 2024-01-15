@@ -20,9 +20,10 @@ const Layout: FC = () => {
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
-            <Grid item xl={3} container direction="column" margin={2} spacing={2}>
+            <Grid item lg={4} container direction="column" margin={2} spacing={2}>
                 <Grid item>
                     <TextField
+                        fullWidth
                         name="Email"
                         label="Email"
                         type="email"
@@ -31,6 +32,7 @@ const Layout: FC = () => {
                 </Grid>
                 <Grid item>
                     <TextField
+                        fullWidth
                         name="Password"
                         label="Password"
                         type="password"
@@ -39,14 +41,18 @@ const Layout: FC = () => {
                     />
                 </Grid>
                 <Grid item>
-                    <Button variant="outlined" color="primary" onClick={login}>
+                    <Button 
+                    fullWidth
+                    variant="outlined" 
+                    color="primary" 
+                    onClick={login}>
                         Login
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Typography>
+                    <p>
                         Don't have an account?  <Link to="/sign-up">Sign Up</Link>
-                    </Typography>
+                    </p>
                 </Grid>
             </Grid>
         </Box>

@@ -7,30 +7,33 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const theme = createTheme({
-  palette: {
-    mode: 'dark'
-  },
+    palette: {
+        mode: 'dark'
+    },
 })
 
 function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          <Route path='/login' element={<Login />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="blogs" element={<Blogs />} />
-            <Route path="contact" element={<Contact />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ErrorBoundary>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path='/login' element={<Login />} />
+                        <Route path="/" element={<Layout />}>
+                            <Route index element={<Home />} />
+                            <Route path="blogs" element={<Blogs />} />
+                            <Route path="contact" element={<Contact />} />
+                        </Route>
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </BrowserRouter>
+            </ErrorBoundary>
+        </ThemeProvider>
+    );
 }
 
 export default App
