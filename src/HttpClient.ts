@@ -7,7 +7,7 @@ const headers: Readonly<Record<string, string | boolean>> = {
     "X-Requested-With": "XMLHttpRequest",
 }
 
-export const tokenName: string = "accessToken"
+const tokenName: string = "accessToken"
 
 class HttpBase {
     private _client: AxiosInstance | null = null
@@ -15,6 +15,11 @@ class HttpBase {
     public set token(value: string) {
         localStorage.setItem(tokenName, value);
     }
+
+    public get token() : string {
+        return localStorage.getItem(tokenName) ?? '';
+    }
+
 
     protected get client(): AxiosInstance {
         return this._client ?? this.create()

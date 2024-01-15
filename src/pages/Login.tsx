@@ -1,15 +1,21 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material"
-import { ChangeEvent, FC, useState } from "react"
+import { ChangeEvent, FC, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { httpClient } from "../HttpClient"
 import { DefaultUserCredentials, UserCredentials } from "../models/UserCredentials"
+import { useNavigate } from 'react-router-dom';
 
 const Layout: FC = () => {
 
     const [userCredentials, setUserCredentials] = useState<UserCredentials>(DefaultUserCredentials);
+    const navigate = useNavigate();
 
     const login = async (): Promise<void> => {
-        httpClient.token = await httpClient.post<UserCredentials, string>('login', userCredentials)
+        httpClient.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
+
+        if (httpClient.token.length > 0) {
+            navigate('/')
+        }
     }
 
     const credentialsChanged = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -17,6 +23,10 @@ const Layout: FC = () => {
         newCreds[event.target.name as keyof UserCredentials] = event.target.value
         setUserCredentials(newCreds)
     }
+
+    useEffect(() => {
+        httpClient.token = ''
+      }, []);
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
@@ -41,11 +51,11 @@ const Layout: FC = () => {
                     />
                 </Grid>
                 <Grid item>
-                    <Button 
-                    fullWidth
-                    variant="outlined" 
-                    color="primary" 
-                    onClick={login}>
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary"
+                        onClick={login}>
                         Login
                     </Button>
                 </Grid>
