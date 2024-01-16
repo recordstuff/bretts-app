@@ -1,6 +1,7 @@
 import { httpClient } from "../HttpClient"
 import { FC } from "react"
 import Login from "../pages/Login";
+import { Navigate } from "react-router-dom";
 
 interface Props {
     children: React.ReactNode;
@@ -19,7 +20,7 @@ const PrivateRoute: FC<Props> = (props) => {
         <>
             {children}
         </>
-    ) : <Login />
+    ) : <Navigate to='/login' />
 }
 
 export default PrivateRoute

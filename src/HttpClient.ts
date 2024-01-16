@@ -16,7 +16,7 @@ class HttpBase {
         localStorage.setItem(tokenName, value);
     }
 
-    public get token() : string {
+    public get token(): string {
         return localStorage.getItem(tokenName) ?? '';
     }
 
@@ -51,7 +51,9 @@ class HttpBase {
 class HttpClient extends HttpBase {
 
     public async post<Body, Response>(url: string, body: Body): Promise<Response> {
-        return await this.client.post<Body, Response>(url, body)
+        const response = await this.client.post<Response>(url, body)
+
+        return response.data;
     }
 }
 

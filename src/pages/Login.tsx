@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { httpClient } from "../HttpClient"
 import { DefaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from "axios"
 
 const Layout: FC = () => {
 
@@ -11,11 +12,17 @@ const Layout: FC = () => {
     const navigate = useNavigate();
 
     const login = async (): Promise<void> => {
-        httpClient.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
+        //try {
+            httpClient.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
 
-        if (httpClient.token.length > 0) {
-            navigate('/')
-        }
+            if (httpClient.token.length > 0) {
+                navigate('/')
+            }
+        /*}
+        catch (ex: any) {
+            
+            throw ex;
+        }*/
     }
 
     const credentialsChanged = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
