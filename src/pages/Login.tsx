@@ -1,7 +1,8 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material"
 import { ChangeEvent, FC, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { httpClient } from "../HttpClient"
+import { httpClient } from "../services/HttpClient"
+import { jwtUtil } from "../services/JwtUtil"
 import { DefaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from "axios"
@@ -12,17 +13,17 @@ const Layout: FC = () => {
     const navigate = useNavigate();
 
     const login = async (): Promise<void> => {
-        //try {
-            httpClient.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
+        try {
+            jwtUtil.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
 
-            if (httpClient.token.length > 0) {
+            if (!jwtUtil.isExpired) {
                 navigate('/')
             }
-        /*}
-        catch (ex: any) {
-            
+        }
+        catch (ex: unknown) {
+            // TODO: handle unauthorized and badrequest
             throw ex;
-        }*/
+        }
     }
 
     const credentialsChanged = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
@@ -32,7 +33,7 @@ const Layout: FC = () => {
     }
 
     useEffect(() => {
-        httpClient.token = ''
+        jwtUtil.clear();
       }, []);
 
     return (

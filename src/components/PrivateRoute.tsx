@@ -1,7 +1,7 @@
-import { httpClient } from "../HttpClient"
+import { useEffect } from 'react';
+import { jwtUtil } from "../services/JwtUtil"
 import { FC } from "react"
-import Login from "../pages/Login";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     children: React.ReactNode;
@@ -9,18 +9,20 @@ interface Props {
 
 const PrivateRoute: FC<Props> = (props) => {
     const { children } = props;
+    const isAuthenticated = !jwtUtil.isExpired
+    const navigate = useNavigate();
 
-    const isAuthenticated = (): boolean => {
-        // TODO: check for token expired, whatever else we can easily check
-        // real security is on the backend
-        return httpClient.token.length > 0;
-    }
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login')
+        }
+    }, []);
 
-    return isAuthenticated() ? (
+    return (
         <>
-            {children}
+            {isAuthenticated && children}
         </>
-    ) : <Navigate to='/login' />
+    )
 }
 
 export default PrivateRoute

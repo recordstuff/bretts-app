@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios"
+import { encodedTokenName } from "./JwtUtil"
 
 const headers: Readonly<Record<string, string | boolean>> = {
     "Accept": "application/json",
@@ -7,19 +8,8 @@ const headers: Readonly<Record<string, string | boolean>> = {
     "X-Requested-With": "XMLHttpRequest",
 }
 
-const tokenName: string = "accessToken"
-
 class HttpBase {
     private _client: AxiosInstance | null = null
-
-    public set token(value: string) {
-        localStorage.setItem(tokenName, value);
-    }
-
-    public get token(): string {
-        return localStorage.getItem(tokenName) ?? '';
-    }
-
 
     protected get client(): AxiosInstance {
         return this._client ?? this.create()
@@ -38,7 +28,7 @@ class HttpBase {
     }
 
     private injectToken(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
-        const token = localStorage.getItem(tokenName);
+        const token = localStorage.getItem(encodedTokenName);
 
         if (token && config?.headers) {
             config.headers.Authorization = `Bearer ${token}`;
