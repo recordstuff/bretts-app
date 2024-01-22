@@ -1,11 +1,10 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material"
+import { Box, Button, Grid, TextField } from "@mui/material"
 import { ChangeEvent, FC, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { httpClient } from "../services/HttpClient"
 import { jwtUtil } from "../services/JwtUtil"
 import { DefaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
-import { AxiosError } from "axios"
 
 const Layout: FC = () => {
 

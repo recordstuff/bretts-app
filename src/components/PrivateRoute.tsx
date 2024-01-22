@@ -16,7 +16,7 @@ const PrivateRoute: FC<Props> = (props) => {
         if (!isAuthenticated) {
             navigate('/login')
         }
-    }, []);
+    }, [isAuthenticated, navigate]);
 
     return (
         <>
