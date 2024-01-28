@@ -1,14 +1,13 @@
 import { Box, Button, Grid, TextField } from "@mui/material"
 import { ChangeEvent, FC, useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { httpClient } from "../services/HttpClient"
 import { jwtUtil } from "../services/JwtUtil"
-import { DefaultUserCredentials, UserCredentials } from "../models/UserCredentials"
+import { defaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
 
 const Layout: FC = () => {
 
-    const [userCredentials, setUserCredentials] = useState<UserCredentials>(DefaultUserCredentials);
+    const [userCredentials, setUserCredentials] = useState<UserCredentials>(defaultUserCredentials());
     const navigate = useNavigate();
 
     const login = async (): Promise<void> => {
@@ -33,7 +32,7 @@ const Layout: FC = () => {
 
     useEffect(() => {
         jwtUtil.clear();
-      }, []);
+    }, []);
 
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
@@ -66,14 +65,18 @@ const Layout: FC = () => {
                         Login
                     </Button>
                 </Grid>
-                <Grid item>
+                {/*<Grid item>
                     <p>
                         Don't have an account?  <Link to="/sign-up">Sign Up</Link>
+                    </p>
+                </Grid> */}
+                <Grid item>
+                    <p>
+                        This is the React frontend.  Go to the <a href="http://brettdrake.org:8008/">Angular frontend</a>.
                     </p>
                 </Grid>
             </Grid>
         </Box>
-
     )
 }
 

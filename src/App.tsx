@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './pages/Layout';
 import Home from './pages/Home';
-import Blogs from './pages/Blogs';
-import Contact from './pages/Contact';
+import Profile from './pages/Profile';
+import History from './pages/History';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -25,8 +25,8 @@ function App() {
                         <Route path='/login' element={<Login />} />
                         <Route path="/" element={<Layout />}>
                             <Route index element={<Home />} />
-                            <Route path="blogs" element={<Blogs />} />
-                            <Route path="contact" element={<Contact />} />
+                            <Route path="history" element={<History />} />
+                            <Route path="profile" element={<Profile />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>

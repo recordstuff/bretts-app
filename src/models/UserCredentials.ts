@@ -3,7 +3,7 @@ export interface UserCredentials {
     Password: string
 }
 
-export const DefaultUserCredentials = () : UserCredentials =>
+export const defaultUserCredentials = () : UserCredentials =>
 {
     return {
         Email: "",

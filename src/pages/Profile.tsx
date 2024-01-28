@@ -1,18 +1,18 @@
 import { Dispatch, FC, SetStateAction, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
 
-const Home: FC = () => {
+const Profile: FC = () => {
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
 
     useEffect(() => {
-        setPageTitle('Meditation Timer')
+        setPageTitle('Profile')
     }, [setPageTitle])
-
+    
     return (
-        <>
-            <p>Hello from the home page.</p>
-        </>
-    )
+    <>
+      <p>Hello from the profile page.</p>
+    </>
+  )
 }
 
-export default Home
+export default Profile
