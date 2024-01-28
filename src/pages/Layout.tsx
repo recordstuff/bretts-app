@@ -59,7 +59,7 @@ const Layout: FC = () => {
                 >
                     <List>
                         {menuOptions.map((menuOption) => (
-                                <ListItem key={menuOption.Text} disablePadding component={Link} to={menuOption.Route}>
+                                <ListItem key={menuOption.Text} disablePadding component={Link} to={menuOption.Route} className='menu-link'>
                                     <ListItemButton>
                                         <ListItemIcon>
                                             <menuOption.Icon/>
