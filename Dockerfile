@@ -19,6 +19,10 @@ RUN npm run build
 # Install serve to serve the production build
 RUN npm install -g serve
 
+# set up letsencrypt manual challenge
+RUN chmod +x ./letsencrypt.sh
+RUN ./letsencrypt.sh
+
 # Set environment variables for HTTPS
 #ENV HTTPS_KEY=/app/ssl/key.pem
 #ENV HTTPS_CERT=/app/ssl/cert.pem
@@ -27,9 +31,9 @@ RUN npm install -g serve
 #COPY ./ssl/key.pem /app/ssl/key.pem
 #COPY ./ssl/cert.pem /app/ssl/cert.pem
 
-# Expose the HTTPS port
-EXPOSE 80
+# Expose HTTP and HTTPS ports
+EXPOSE 80 443
 
 # Serve the production build over HTTPS
 #CMD ["serve", "-s", "-l", "443", "-C", "--ssl-key", "$HTTPS_KEY", "--ssl-cert", "$HTTPS_CERT", "build"]
-CMD ["serve", "-s", "-l", "80", "-C", "build"]
+CMD ["serve", "-s", "-l", "80", "-l", "443", "-C", "build"]
