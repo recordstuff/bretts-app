@@ -1,18 +1,24 @@
-import { Jwt } from "../models/Jwt"
-
-export const encodedTokenName: string = "accessToken"
+import { ENCODED_TOKEN_NAME, Jwt, JwtField, JwtRole } from "../models/Jwt"
 
 class JwtUtil {
-    private readonly expirationName: string = "accessTokenExpiration"
-
     public get isExpired() : boolean {
-        const expireSecondsStr = localStorage.getItem(this.expirationName)
+        const expirationSecondsStr = localStorage.getItem(JwtField.ExpirationSeconds)
 
-        if (expireSecondsStr === null) return true
+        if (expirationSecondsStr === null) return true
 
-        const expireSeconds = parseInt(expireSecondsStr)
+        const expirationSeconds = parseInt(expirationSecondsStr)
 
-        return expireSeconds <= Date.now() / 1000
+        return expirationSeconds <= Date.now() / 1000
+    }
+
+    public get isAdmin() : boolean {
+        const rolesStr = localStorage.getItem(JwtField.Roles)
+
+        if (rolesStr === null) return false
+
+        const roles: string[] = JSON.parse(rolesStr)
+
+        return roles.indexOf(JwtRole.Admin) >= 0
     }
 
     public set token(encodedToken: string) {
@@ -26,12 +32,28 @@ class JwtUtil {
                     body = body.padEnd(padding)
                 }
 
-                const jwt: Jwt = JSON.parse(atob(body))
+                const jwt: Jwt = new Map()
+                const fields = Object.entries(JSON.parse(atob(body)))
 
-                localStorage.setItem(encodedTokenName, encodedToken)
-                localStorage.setItem(this.expirationName, jwt.exp.toString())                
+                for (const [key, value] of fields) {
+                    jwt.set(key as JwtField, value as string | number | string[])
+                }
 
-                return
+                const expriationSeconds = jwt.get(JwtField.ExpirationSeconds)
+                let roles = jwt.get(JwtField.Roles)
+
+                if (typeof roles === 'string')
+                {
+                    roles = [roles]                    
+                }
+
+                if (expriationSeconds !== undefined 
+                 && roles !== undefined) {
+                    localStorage.setItem(ENCODED_TOKEN_NAME, encodedToken)
+                    localStorage.setItem(JwtField.ExpirationSeconds, expriationSeconds as string)
+                    localStorage.setItem(JwtField.Roles, JSON.stringify(roles))         
+                    return
+                }
             }
 
             this.clear()
@@ -42,8 +64,9 @@ class JwtUtil {
     }
 
     public clear(): void {
-        localStorage.removeItem(encodedTokenName)
-        localStorage.removeItem(this.expirationName)
+        localStorage.removeItem(ENCODED_TOKEN_NAME)
+        localStorage.removeItem(JwtField.ExpirationSeconds)
+        localStorage.removeItem(JwtField.Roles)
     }
 }
 
