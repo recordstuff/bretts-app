@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios"
-import { encodedTokenName } from "./JwtUtil"
+import { ENCODED_TOKEN_NAME } from "../models/Jwt"
 
 const headers: Readonly<Record<string, string | boolean>> = {
     "Accept": "application/json",
@@ -28,7 +28,7 @@ class HttpBase {
     }
 
     private injectToken(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
-        const token = localStorage.getItem(encodedTokenName);
+        const token = localStorage.getItem(ENCODED_TOKEN_NAME);
 
         if (token && config?.headers) {
             config.headers.Authorization = `Bearer ${token}`;
