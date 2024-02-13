@@ -8,10 +8,13 @@ import { useNavigate } from 'react-router-dom';
 const Layout: FC = () => {
 
     const [userCredentials, setUserCredentials] = useState<UserCredentials>(defaultUserCredentials());
+    const [useErrorCondition, setUseErrorCondition] = useState<boolean>(false)
     const navigate = useNavigate();
     
     const login = async (): Promise<void> => {
         try {
+            setUseErrorCondition(true)
+
             if (userCredentials.Email.length === 0 || userCredentials.Password.length === 0) return
 
             jwtUtil.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
@@ -47,8 +50,8 @@ const Layout: FC = () => {
                         type="email"
                         onChange={credentialsChanged}
                         required
-                        error={userCredentials.Email.length === 0}
-                        helperText={userCredentials.Email.length === 0 && "Email cannot be blank."}
+                        error={useErrorCondition && userCredentials.Email.length === 0}
+                        helperText={useErrorCondition && userCredentials.Email.length === 0 && "Email cannot be blank."}
                     />
                 </Grid>
                 <Grid item>
@@ -59,8 +62,8 @@ const Layout: FC = () => {
                         type="password"
                         onChange={credentialsChanged}
                         required
-                        error={userCredentials.Password.length === 0}
-                        helperText={userCredentials.Password.length === 0 && "Password cannot be blank."}
+                        error={useErrorCondition && userCredentials.Password.length === 0}
+                        helperText={useErrorCondition && userCredentials.Password.length === 0 && "Password cannot be blank."}
                     />
                 </Grid>
                 <Grid item>
