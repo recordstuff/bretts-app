@@ -24,7 +24,7 @@ const Layout: FC = () => {
             }
         }
         catch (ex: unknown) {
-            // TODO: handle unauthorized and badrequest
+            // TODO: handle badrequest
             throw ex;
         }
     }
