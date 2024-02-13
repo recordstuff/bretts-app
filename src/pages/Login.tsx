@@ -8,10 +8,17 @@ import { useNavigate } from 'react-router-dom';
 const Layout: FC = () => {
 
     const [userCredentials, setUserCredentials] = useState<UserCredentials>(defaultUserCredentials());
+    const [useErrorCondition, setUseErrorCondition] = useState<boolean>(false)
     const navigate = useNavigate();
 
     const login = async (): Promise<void> => {
         try {
+            // the browser autofilling the user name and password doesn't cause the change event to fire
+            // until there is user interaction with the page.  enabling the error property after login is
+            // clicked is the least jarring way visually to keep both the feedback and the autofill behavior
+            setUseErrorCondition(true)
+            if (userCredentials.Email.length === 0 || userCredentials.Password.length === 0) return
+
             jwtUtil.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
 
             if (!jwtUtil.isExpired) {
@@ -44,6 +51,8 @@ const Layout: FC = () => {
                         label="Email"
                         type="email"
                         onChange={credentialsChanged}
+                        required
+                        error={useErrorCondition && userCredentials.Email.length === 0}
                     />
                 </Grid>
                 <Grid item>
@@ -52,8 +61,9 @@ const Layout: FC = () => {
                         name="Password"
                         label="Password"
                         type="password"
-                        autoComplete="current-password"
                         onChange={credentialsChanged}
+                        required
+                        error={useErrorCondition && userCredentials.Password.length === 0}
                     />
                 </Grid>
                 <Grid item>
