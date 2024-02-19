@@ -9,7 +9,7 @@ const Layout: FC = () => {
 
     const [userCredentials, setUserCredentials] = useState<UserCredentials>(defaultUserCredentials());
     const [useErrorCondition, setUseErrorCondition] = useState<boolean>(false)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     
     const login = async (): Promise<void> => {
         try {

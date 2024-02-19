@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { PleaseWait } from './components/PleaseWait';
 
 const theme = createTheme({
     palette: {
@@ -20,6 +21,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <ErrorBoundary>
+                <PleaseWait />
                 <BrowserRouter>
                     <Routes>
                         <Route path='/login' element={<Login />} />
@@ -33,7 +35,7 @@ function App() {
                 </BrowserRouter>
             </ErrorBoundary>
         </ThemeProvider>
-    );
+    )
 }
 
 export default App
