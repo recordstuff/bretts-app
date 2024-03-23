@@ -1,13 +1,15 @@
 import { Backdrop, CircularProgress } from "@mui/material"
-import { FC, createContext, useState } from "react"
+import { FC } from "react"
+import { useSelector } from "react-redux"
+import { RootState } from "../store"
 
 export const PleaseWait: FC = () => {
-    const [pleaseWait, setPleaseWait] = useState(true)
-    
+    const waitCount: number = useSelector((state: RootState) => state.waitSpinner.waitCount)
+
     return (
         <Backdrop
             sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={pleaseWait}
+            open={waitCount > 0}
         >
             <CircularProgress />
         </Backdrop>

@@ -7,7 +7,7 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import ErrorBoundary from './components/ErrorBoundary';
 import { PleaseWait } from './components/PleaseWait';
 
 const theme = createTheme({

@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios"
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
 import { ENCODED_TOKEN_NAME } from "../models/Jwt"
 
 const headers: Readonly<Record<string, string | boolean>> = {

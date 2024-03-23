@@ -4,12 +4,15 @@ import { httpClient } from "../services/HttpClient"
 import { jwtUtil } from "../services/JwtUtil"
 import { defaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux"
+import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 
 const Layout: FC = () => {
 
     const [userCredentials, setUserCredentials] = useState<UserCredentials>(defaultUserCredentials());
     const [useErrorCondition, setUseErrorCondition] = useState<boolean>(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     
     const login = async (): Promise<void> => {
         try {
@@ -17,7 +20,11 @@ const Layout: FC = () => {
 
             if (userCredentials.Email.length === 0 || userCredentials.Password.length === 0) return
 
+            dispatch(pleaseWait())
+
             jwtUtil.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
+
+            dispatch(doneWaiting())
 
             if (!jwtUtil.isExpired) {
                 navigate('/')

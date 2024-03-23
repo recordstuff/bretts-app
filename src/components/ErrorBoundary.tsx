@@ -1,7 +1,11 @@
 import React, { ErrorInfo } from "react";
+import { connect } from 'react-redux';
+import { clearAllWaits } from '../reducers/WaitSpinnerSlice'
+import { Dispatch } from "@reduxjs/toolkit";
 
 interface Props {
-    children?: React.ReactNode
+    children?: React.ReactNode,
+    clearAllWaits: () => void
 }
 
 interface State {
@@ -10,7 +14,7 @@ interface State {
     name: string
 }
 
-export class ErrorBoundary extends React.PureComponent<Props, State> {
+class ErrorBoundary extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = { hasError: false, message: '', name: '' };
@@ -36,6 +40,8 @@ export class ErrorBoundary extends React.PureComponent<Props, State> {
 
     render() {
         if (this.state.hasError) {
+            // clear all waits just in case this.state.hasError is reset somehow (as in the case of hot reload)
+            this.props.clearAllWaits && this.props.clearAllWaits()
             return (
                 <>
                     <h1>Unfortunate Occurance</h1>
@@ -49,3 +55,9 @@ export class ErrorBoundary extends React.PureComponent<Props, State> {
         return this.props.children
     }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    clearAllWaits: () => dispatch(clearAllWaits()),
+});
+
+export default connect(null, mapDispatchToProps)(ErrorBoundary)
