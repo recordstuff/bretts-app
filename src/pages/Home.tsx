@@ -5,7 +5,7 @@ const Home: FC = () => {
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
 
     useEffect(() => {
-        setPageTitle('Meditation Timer')
+        setPageTitle('Home')
     }, [setPageTitle])
 
     return (

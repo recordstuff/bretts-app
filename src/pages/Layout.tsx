@@ -1,7 +1,7 @@
 import { FC, useState } from "react"
 import { Outlet, Link } from "react-router-dom"
 import PrivateRoute from "../components/PrivateRoute"
-import { AppBar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import AlarmIcon from '@mui/icons-material/Alarm';
 import HistoryIcon from '@mui/icons-material/History';
 import PersonIcon from '@mui/icons-material/Person';

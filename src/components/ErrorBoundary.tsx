@@ -26,7 +26,7 @@ class ErrorBoundary extends React.PureComponent<Props, State> {
 
     public componentDidMount(): void {
         window.addEventListener('error', (event: ErrorEvent) => {
-            this.setState({ hasError: true, message: event.message, name: 'Unhandled Error' })
+            this.setState({ hasError: true, message: event.message, name: 'Error' })
         });
 
         window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
@@ -41,7 +41,7 @@ class ErrorBoundary extends React.PureComponent<Props, State> {
     render() {
         if (this.state.hasError) {
             // clear all waits just in case this.state.hasError is reset somehow (as in the case of hot reload)
-            this.props.clearAllWaits && this.props.clearAllWaits()
+            this.props.clearAllWaits()
             return (
                 <>
                     <h1>Unfortunate Occurance</h1>

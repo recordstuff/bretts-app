@@ -16,7 +16,9 @@ export const WaitSpinnerSlice = createSlice({
             state.waitCount++
         },
         doneWaiting: (state): void => {
-            state.waitCount--
+            if (state.waitCount > 0) {
+                state.waitCount--
+            }
         },
         clearAllWaits: (state): void => {
             state.waitCount = 0

@@ -1,11 +1,12 @@
 import { Box, Button, Grid, Snackbar, TextField } from "@mui/material"
 import { ChangeEvent, FC, useEffect, useState } from "react"
-import { httpClient } from "../services/HttpClient"
+import { HTTP_STATUS_CODES, httpClient } from "../services/HttpClient"
 import { jwtUtil } from "../services/JwtUtil"
 import { defaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
 import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
+import { AxiosError } from "axios"
 
 const Layout: FC = () => {
 
@@ -32,10 +33,13 @@ const Layout: FC = () => {
             }
         }
         catch (ex: unknown) {
-            // TODO: handle badrequest
             dispatch(doneWaiting())
-            setIsInvalidCredentials(true)
-            //throw ex;
+            if (ex instanceof AxiosError && ex.response?.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
+                setIsInvalidCredentials(true)
+                return
+            }
+
+            throw ex
         }
     }
 
@@ -82,7 +86,8 @@ const Layout: FC = () => {
                         fullWidth
                         variant="outlined"
                         color="primary"
-                        onClick={login}>
+                        onClick={login}
+                        disabled={userCredentials.Email.length === 0 || userCredentials.Password.length === 0}>
                         Login
                     </Button>
                 </Grid>
