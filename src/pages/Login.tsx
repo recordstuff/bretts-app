@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField } from "@mui/material"
+import { Box, Button, Grid, Snackbar, TextField } from "@mui/material"
 import { ChangeEvent, FC, useEffect, useState } from "react"
 import { httpClient } from "../services/HttpClient"
 import { jwtUtil } from "../services/JwtUtil"
@@ -11,9 +11,10 @@ const Layout: FC = () => {
 
     const [userCredentials, setUserCredentials] = useState<UserCredentials>(defaultUserCredentials());
     const [useErrorCondition, setUseErrorCondition] = useState<boolean>(false)
+    const [isInvalidCredentials, setIsInvalidCredentials] = useState<boolean>(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    
+
     const login = async (): Promise<void> => {
         try {
             setUseErrorCondition(true)
@@ -32,11 +33,14 @@ const Layout: FC = () => {
         }
         catch (ex: unknown) {
             // TODO: handle badrequest
-            throw ex;
+            dispatch(doneWaiting())
+            setIsInvalidCredentials(true)
+            //throw ex;
         }
     }
 
     const credentialsChanged = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        setIsInvalidCredentials(false)
         let newCreds = { ...userCredentials }
         newCreds[event.target.name as keyof UserCredentials] = event.target.value
         setUserCredentials(newCreds)
@@ -82,11 +86,12 @@ const Layout: FC = () => {
                         Login
                     </Button>
                 </Grid>
-                {/*<Grid item>
-                    <p>
-                        Don't have an account?  <Link to="/sign-up">Sign Up</Link>
-                    </p>
-                </Grid> */}
+                <Snackbar
+                    open={isInvalidCredentials}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={3000}
+                    message="The Email or Password was incorrect."
+                />                
                 <Grid item>
                     <p>
                         This is the React frontend.  Go to the <a href="http://brettdrake.org:8008/">Angular frontend</a>.

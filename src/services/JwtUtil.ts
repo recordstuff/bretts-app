@@ -11,14 +11,18 @@ class JwtUtil {
         return expirationSeconds <= Date.now() / 1000
     }
 
-    public get isAdmin() : boolean {
+    public hasRole(role: JwtRole) : boolean {
+        if (this.isExpired) return false
+        
+        if (role === JwtRole.Any) return true
+
         const rolesStr = localStorage.getItem(JwtField.Roles)
 
         if (rolesStr === null) return false
 
         const roles: string[] = JSON.parse(rolesStr)
 
-        return roles.indexOf(JwtRole.Admin) >= 0
+        return roles.indexOf(role) >= 0
     }
 
     public set token(encodedToken: string) {

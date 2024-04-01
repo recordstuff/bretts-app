@@ -13,6 +13,7 @@ export enum JwtField {
 }
 
 export enum JwtRole {
+    Any = "Any",
+    Admin = "Admin",
     User = "User",
-    Admin = "Admin"
 }

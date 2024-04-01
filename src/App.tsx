@@ -9,6 +9,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import ErrorBoundary from './components/ErrorBoundary';
 import { PleaseWait } from './components/PleaseWait';
+import Users from './pages/Users';
+import Settings from './pages/Settings';
 
 const theme = createTheme({
     palette: {
@@ -29,6 +31,8 @@ function App() {
                             <Route index element={<Home />} />
                             <Route path="history" element={<History />} />
                             <Route path="profile" element={<Profile />} />
+                            <Route path="users" element={<Users />} />
+                            <Route path="settings" element={<Settings />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />
                     </Routes>
