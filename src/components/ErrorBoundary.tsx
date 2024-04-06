@@ -2,6 +2,8 @@ import React, { ErrorInfo } from "react";
 import { connect } from 'react-redux';
 import { clearAllWaits } from '../reducers/WaitSpinnerSlice'
 import { Dispatch } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
+import { HTTP_STATUS_CODES } from "../services/HttpClient";
 
 interface Props {
     children?: React.ReactNode,
@@ -10,6 +12,7 @@ interface Props {
 
 interface State {
     hasError: boolean
+    suppressMessage : boolean
     message: string
     name: string
 }
@@ -17,20 +20,23 @@ interface State {
 class ErrorBoundary extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = { hasError: false, message: '', name: '' };
+        this.state = { hasError: false, suppressMessage: false, message: '', name: '' };
     }
 
     public static getDerivedStateFromError(error: Error) {
-        return { hasError: true, message: error.message, name: error.name }
+        return { hasError: true, supressMessage: false, message: error.message, name: error.name }
     }
 
     public componentDidMount(): void {
         window.addEventListener('error', (event: ErrorEvent) => {
-            this.setState({ hasError: true, message: event.message, name: 'Error' })
+            this.setState({ hasError: true, suppressMessage: false, message: event.message, name: 'Error' })
         });
 
         window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
-            this.setState({ hasError: true, message: event.reason.toString(), name: event.type })
+            const suppressMessage = event.reason instanceof AxiosError 
+                                 && event.reason.response?.status === HTTP_STATUS_CODES.FORBIDDEN
+
+            this.setState({ hasError: true, suppressMessage, message: event.reason.toString(), name: event.type })
         });
     }
 
@@ -42,6 +48,10 @@ class ErrorBoundary extends React.PureComponent<Props, State> {
         if (this.state.hasError) {
             // clear all waits just in case this.state.hasError is reset somehow (as in the case of hot reload)
             this.props.clearAllWaits()
+            
+            if (this.state.suppressMessage)
+                return <></>
+            
             return (
                 <>
                     <h1>Unfortunate Occurance</h1>
