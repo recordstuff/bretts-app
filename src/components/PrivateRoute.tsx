@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { jwtUtil } from "../services/JwtUtil"
+import { jwtUtil } from "../wrappers/JwtUtil"
 import { FC } from "react"
 import { useNavigate } from "react-router-dom";
 

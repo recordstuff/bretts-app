@@ -9,7 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { MenuOption } from "../models/MenuOption";
 import { JwtRole } from "../models/Jwt";
-import { jwtUtil } from "../services/JwtUtil"
+import { jwtUtil } from "../wrappers/JwtUtil"
 
 const drawerWidth = 176
 const menuOptions: MenuOption[] = [

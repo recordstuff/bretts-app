@@ -1,12 +1,13 @@
 import { Box, Button, Grid, Snackbar, TextField } from "@mui/material"
 import { ChangeEvent, FC, useEffect, useState } from "react"
-import { HTTP_STATUS_CODES, httpClient } from "../services/HttpClient"
-import { jwtUtil } from "../services/JwtUtil"
+import { HTTP_STATUS_CODES } from "../services/HttpClient"
+import { jwtUtil } from "../wrappers/JwtUtil"
 import { defaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
 import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 import { AxiosError } from "axios"
+import { userClient } from "../services/UserClient"
 
 const Layout: FC = () => {
 
@@ -24,7 +25,7 @@ const Layout: FC = () => {
 
             dispatch(pleaseWait())
 
-            jwtUtil.token = await httpClient.post<UserCredentials, string>('user/login', userCredentials)
+            jwtUtil.token = await userClient.login(userCredentials)
 
             dispatch(doneWaiting())
 
@@ -87,7 +88,7 @@ const Layout: FC = () => {
                         variant="outlined"
                         color="primary"
                         onClick={login}
-                        disabled={userCredentials.Email.length === 0 || userCredentials.Password.length === 0}>
+                        disabled={useErrorCondition && (userCredentials.Email.length === 0 || userCredentials.Password.length === 0)}>
                         Login
                     </Button>
                 </Grid>

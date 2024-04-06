@@ -1,7 +1,8 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "axios"
 import { ENCODED_TOKEN_NAME } from "../models/Jwt"
 
 export enum HTTP_STATUS_CODES {
+    FORBIDDEN = 403,
     UNAUTHORIZED = 401
 }
 
@@ -12,7 +13,7 @@ const headers: Readonly<Record<string, string | boolean>> = {
     "X-Requested-With": "XMLHttpRequest",
 }
 
-class HttpBase {
+abstract class HttpBase {
     private _client: AxiosInstance | null = null
 
     protected get client(): AxiosInstance {
@@ -26,43 +27,54 @@ class HttpBase {
             withCredentials: true,
         })
 
-        this._client.interceptors.request.use(this.injectToken, (error) => Promise.reject(error));
+        this._client.interceptors.request.use(this.injectToken, (error) => Promise.reject(error))
+        this._client.interceptors.response.use((response) => response, this.onResponseError)
 
-        // TODO: redirect to login if 401 and not already on login page
-
-        return this._client;
+        return this._client
     }
 
     private injectToken(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
-        const token = localStorage.getItem(ENCODED_TOKEN_NAME);
+        const token = localStorage.getItem(ENCODED_TOKEN_NAME)
 
         if (token && config?.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token}`
         }
+        
+        return config
+    }
 
-        return config;
+    private onResponseError = (error: AxiosError): Promise<AxiosError> => {
+        if (error.response?.status === HTTP_STATUS_CODES.FORBIDDEN) {
+            window.location.href = '/login'
+        }
+        
+        return Promise.reject(error);
     }
 }
 
-class HttpClient extends HttpBase {
+export abstract class HttpClient extends HttpBase {
+    private _basePath: string
 
-    public async get<Response>(url: string): Promise<Response> {
-        const response = await this.client.get<Response>(url)
-
-        return response.data;
+    constructor(basePath: string) {
+        super()
+        this._basePath = basePath
     }
 
-    public async post<Body, Response>(url: string, body: Body): Promise<Response> {
-        const response = await this.client.post<Response>(url, body)
+    protected async get<Response>(url: string, params: any = null): Promise<Response> {
+        const response = await this.client.get<Response>(`${this._basePath}/${url}`, {params})
 
-        return response.data;
+        return response.data
     }
 
-    public async put<Body, Response>(url: string, body: Body): Promise<Response> {
-        const response = await this.client.put<Response>(url, body)
+    protected async post<Body, Response>(url: string, body: Body): Promise<Response> {
+        const response = await this.client.post<Response>(`${this._basePath}/${url}`, body)
 
-        return response.data;
+        return response.data
+    }
+
+    protected async put<Body, Response>(url: string, body: Body): Promise<Response> {
+        const response = await this.client.put<Response>(`${this._basePath}/${url}`, body)
+
+        return response.data
     }
 }
-
-export const httpClient = new HttpClient()
