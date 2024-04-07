@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './pages/Layout';
 import Home from './pages/Home';
-import Profile from './pages/Profile';
-import History from './pages/History';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -11,8 +9,21 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { PleaseWait } from './components/PleaseWait';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
+import GridExample from './pages/GridExample';
+import BaconIpsum from './pages/BaconIpsum';
+import ExampleTwo from './pages/ExampleTwo';
 
 const theme = createTheme({
+    components: {
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+                    paddingTop: '.9em',
+                    paddingBottom: '.9em',
+                },
+            },
+        },
+    },    
     palette: {
         mode: 'dark'
     },
@@ -29,8 +40,9 @@ function App() {
                         <Route path='/login' element={<Login />} />
                         <Route path="/" element={<Layout />}>
                             <Route index element={<Home />} />
-                            <Route path="history" element={<History />} />
-                            <Route path="profile" element={<Profile />} />
+                            <Route path="gridexample" element={<GridExample />} />
+                            <Route path="exampletwo" element={<ExampleTwo />} />
+                            <Route path="baconipsum" element={<BaconIpsum />} />
                             <Route path="users" element={<Users />} />
                             <Route path="settings" element={<Settings />} />
                         </Route>

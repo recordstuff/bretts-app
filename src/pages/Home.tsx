@@ -10,7 +10,7 @@ const Home: FC = () => {
 
     return (
         <>
-            <p>Hello from the home page.</p>
+            <p>Home is where the heart is.</p>
         </>
     )
 }

@@ -10,7 +10,7 @@ const Settings: FC = () => {
     
     return (
     <>
-      <p>Put some settings here.</p>
+      <p>Administrators are fancier than average people.</p>
     </>
   )
 }

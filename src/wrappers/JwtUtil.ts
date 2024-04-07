@@ -43,7 +43,8 @@ class JwtUtil {
                     jwt.set(key as JwtField, value as string | number | string[])
                 }
 
-                const expriationSeconds = jwt.get(JwtField.ExpirationSeconds)
+                const expriationSeconds = jwt.get(JwtField.ExpirationSeconds) as string
+
                 let roles = jwt.get(JwtField.Roles)
 
                 if (typeof roles === 'string')
@@ -51,10 +52,13 @@ class JwtUtil {
                     roles = [roles]                    
                 }
 
+                const displayName: string = jwt.get(JwtField.DisplayName) as string
+
                 if (expriationSeconds !== undefined 
                  && roles !== undefined) {
                     localStorage.setItem(ENCODED_TOKEN_NAME, encodedToken)
-                    localStorage.setItem(JwtField.ExpirationSeconds, expriationSeconds as string)
+                    localStorage.setItem(JwtField.DisplayName, displayName)                    
+                    localStorage.setItem(JwtField.ExpirationSeconds, expriationSeconds)
                     localStorage.setItem(JwtField.Roles, JSON.stringify(roles))         
                     return
                 }
@@ -69,6 +73,7 @@ class JwtUtil {
 
     public clear(): void {
         localStorage.removeItem(ENCODED_TOKEN_NAME)
+        localStorage.removeItem(JwtField.DisplayName)        
         localStorage.removeItem(JwtField.ExpirationSeconds)
         localStorage.removeItem(JwtField.Roles)
     }

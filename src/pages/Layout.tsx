@@ -1,34 +1,42 @@
-import { FC, useState } from "react"
+import { FC, Fragment, useState } from "react"
 import { Outlet, Link } from "react-router-dom"
 import PrivateRoute from "../components/PrivateRoute"
-import { AppBar, Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
-import AlarmIcon from '@mui/icons-material/Alarm';
-import HistoryIcon from '@mui/icons-material/History';
-import PersonIcon from '@mui/icons-material/Person';
+import { AppBar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
+import AgricultureIcon from '@mui/icons-material/Agriculture';
+import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 import { MenuOption } from "../models/MenuOption";
-import { JwtRole } from "../models/Jwt";
+import { JwtField, JwtRole } from "../models/Jwt";
 import { jwtUtil } from "../wrappers/JwtUtil"
 
-const drawerWidth = 176
+const drawerWidth = 200
+let lastRole = JwtRole.Any
 const menuOptions: MenuOption[] = [
     {
         Text: "Home",
         Route: "/",
-        Icon: AlarmIcon,
+        Icon: HomeIcon,
         Role: JwtRole.Any,
     },
     {
-        Text: "History",
-        Route: "/history",
-        Icon: HistoryIcon,
+        Text: "Grid Example",
+        Route: "/gridexample",
+        Icon: TableRowsIcon,
         Role: JwtRole.User,
     },
     {
-        Text: "Profile",
-        Route: "/profile",
-        Icon: PersonIcon,
+        Text: "Example Two",
+        Route: "/exampletwo",
+        Icon: TableChartIcon,
+        Role: JwtRole.User,
+    },
+    {
+        Text: "Bacon Ipsum",
+        Route: "/baconipsum",
+        Icon: AgricultureIcon,
         Role: JwtRole.User,
     },
     {
@@ -62,6 +70,12 @@ const Layout: FC = () => {
                         <Typography variant="h6" noWrap component="div">
                             {pageTitle}
                         </Typography>
+                        <Box sx={{marginLeft: 'auto'}}>
+                        {localStorage.getItem(JwtField.DisplayName)}
+                        <a href="/login" title='Go back to the login screen.'>
+                            <Typography sx={{fontSize: '.9em'}}>Logout</Typography>
+                        </a>
+                        </Box>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -76,18 +90,24 @@ const Layout: FC = () => {
                     variant="permanent"
                     anchor="left"
                 >
-                    <List>
+                    <List> {/* notice the use of Fragment vs <></> since we need the key property */}
                         {menuOptions.map((menuOption) => {
-                            return jwtUtil.hasRole(menuOption.Role) ? (
-                                <ListItem key={menuOption.Text} disablePadding component={Link} to={menuOption.Route} className='menu-link'>
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <menuOption.Icon />
-                                        </ListItemIcon>
-                                        <ListItemText primary={menuOption.Text} />
-                                    </ListItemButton>
-                                </ListItem>
-                            ) : (null);
+                            let component =  jwtUtil.hasRole(menuOption.Role) ? (
+                                <Fragment key={menuOption.Text}>
+                                    {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider/>}
+                                    <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link'>
+                                        <ListItemButton selected={(menuOption.Route === '/' && window.location.pathname === '/') 
+                                                               || (menuOption.Route.length > 1 && window.location.pathname.startsWith(menuOption.Route))}>
+                                            <ListItemIcon>
+                                                <menuOption.Icon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={menuOption.Text} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                </Fragment>
+                            ) : (null)
+                            lastRole = menuOption.Role
+                            return component
                         })}
                     </List>
                 </Drawer>
