@@ -7,8 +7,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-const PrivateRoute: FC<Props> = (props) => {
-    const { children } = props;
+const PrivateRoute: FC<Props> = ({children}) => {
     const isAuthenticated = !jwtUtil.isExpired
     const navigate = useNavigate();
 

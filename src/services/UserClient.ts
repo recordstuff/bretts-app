@@ -18,8 +18,8 @@ class UserClient extends HttpClient {
         pageSize: number,
         searchText: string | null = null,
         roleFilter: JwtRole = JwtRole.Any
-    ): Promise<PaginationResult<User[]>> {
-        return this.get<PaginationResult<User[]>>('users', {page, pageSize, searchText, roleFilter})
+    ): Promise<PaginationResult<User>> {
+        return this.get<PaginationResult<User>>('users', {page, pageSize, searchText, roleFilter})
     }
 }
 
