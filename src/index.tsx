@@ -9,9 +9,10 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 )
 root.render(
-    <React.StrictMode>
+    // don't forget to test with StrictMode sometimes
+    //<React.StrictMode>
         <Provider store={store}>
             <App />
         </Provider>
-    </React.StrictMode>
+    //</React.StrictMode>
 )

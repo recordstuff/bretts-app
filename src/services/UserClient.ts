@@ -1,6 +1,6 @@
 import { JwtRole } from "../models/Jwt";
 import { PaginationResult } from "../models/PaginationResult";
-import { User } from "../models/User";
+import { DisplayedUser } from "../models/DisplayedUser";
 import { UserCredentials } from "../models/UserCredentials";
 import { HttpClient } from "./HttpClient";
 
@@ -18,8 +18,12 @@ class UserClient extends HttpClient {
         pageSize: number,
         searchText: string | null = null,
         roleFilter: JwtRole = JwtRole.Any
-    ): Promise<PaginationResult<User>> {
-        return this.get<PaginationResult<User>>('users', {page, pageSize, searchText, roleFilter})
+    ): Promise<PaginationResult<DisplayedUser>> {
+        return this.get<PaginationResult<DisplayedUser>>('users', {page, pageSize, searchText, roleFilter})
+    }
+
+    public getUser(id: string): Promise<DisplayedUser> {
+        return this.get<DisplayedUser>(`user/${id}`)
     }
 }
 

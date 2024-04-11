@@ -12,6 +12,7 @@ import Settings from './pages/Settings';
 import GridExample from './pages/GridExample';
 import BaconIpsum from './pages/BaconIpsum';
 import ExampleTwo from './pages/ExampleTwo';
+import User from './pages/User';
 
 const theme = createTheme({
     components: {
@@ -23,7 +24,19 @@ const theme = createTheme({
                 },
             },
         },
-    },    
+        MuiTableRow: {
+            styleOverrides: {
+                root: {
+                    '&:nth-of-type(odd)': {
+                        backgroundColor: '#121212',
+                    },
+                    '&.MuiTableRow-head': {
+                        backgroundColor: '#1e1e1e',
+                    },
+                },
+            },
+        },
+    },
     palette: {
         mode: 'dark'
     },
@@ -44,6 +57,7 @@ function App() {
                             <Route path="exampletwo" element={<ExampleTwo />} />
                             <Route path="baconipsum" element={<BaconIpsum />} />
                             <Route path="users" element={<Users />} />
+                            <Route path="user/:id?" element={<User />} />       
                             <Route path="settings" element={<Settings />} />
                         </Route>
                         <Route path="*" element={<NotFound />} />

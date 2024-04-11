@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import waitSpinnerReducer from './reducers/WaitSpinnerSlice'
+import breadcrumbsReducer from './reducers/BreadcrumbsSlice';
 
 
 export const store = configureStore({
   reducer: {
+    breadcrumbs: breadcrumbsReducer,
     waitSpinner: waitSpinnerReducer
   },
 });

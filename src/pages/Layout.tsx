@@ -44,6 +44,7 @@ const menuOptions: MenuOption[] = [
         Route: "/users",
         Icon: PeopleIcon,
         Role: JwtRole.Admin,
+        ChildRoutes: ['/user']
     },
     {
         Text: "Settings",
@@ -96,8 +97,8 @@ const Layout: FC = () => {
                                 <Fragment key={menuOption.Text}>
                                     {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider/>}
                                     <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link'>
-                                        <ListItemButton selected={(menuOption.Route === '/' && window.location.pathname === '/') 
-                                                               || (menuOption.Route.length > 1 && window.location.pathname.startsWith(menuOption.Route))}>
+                                        <ListItemButton selected={menuOption.Route === window.location.pathname 
+                                                               || menuOption.ChildRoutes?.some(cr => window.location.pathname.startsWith(cr))}>
                                             <ListItemIcon>
                                                 <menuOption.Icon />
                                             </ListItemIcon>
@@ -105,7 +106,7 @@ const Layout: FC = () => {
                                         </ListItemButton>
                                     </ListItem>
                                 </Fragment>
-                            ) : (null)
+                            ) : <></>
                             lastRole = menuOption.Role
                             return component
                         })}

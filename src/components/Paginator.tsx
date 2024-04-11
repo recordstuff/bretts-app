@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { Grid, Pagination, Typography } from '@mui/material';
 import { PaginationResult } from '../models/PaginationResult';
 
@@ -7,21 +7,21 @@ export interface Props {
     setPage: Dispatch<SetStateAction<number>>
 }
 
-const Paginator: FC<Props> = ({paginationResult, setPage}) => {
+const Paginator: FC<Props> = ({ paginationResult, setPage }) => {
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value)
-      }
+    }
 
     return (
-        <Grid container marginTop={1} marginBottom={1} spacing={2} direction='column' alignItems='center'>
+        <Grid container direction='column' alignItems='center'>
             <Grid item>
                 <Typography>Page {paginationResult.Page} of {paginationResult.PageCount}</Typography>
             </Grid>
-            <Grid item>
+            <Grid item paddingTop={2}>
                 <Pagination
                     count={paginationResult.PageCount}
-                    showFirstButton 
+                    showFirstButton
                     showLastButton
                     onChange={handleChange}
                 />

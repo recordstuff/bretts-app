@@ -6,4 +6,5 @@ export interface MenuOption {
     Route: string
     Icon: ComponentType
     Role: JwtRole
+    ChildRoutes?: string[]
 }

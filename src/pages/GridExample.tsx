@@ -12,7 +12,7 @@ const GridExample: FC = () => {
     // no need to use <></> as it is only one parent component to return.
 
     return (
-            <Grid container spacing={8}>
+            <Grid container>
                 <Grid item sm={12} lg={6} xl={5} container direction='column' padding={2} spacing={2}>
                     <Grid item>
                         <Typography variant="h6">Contact</Typography>
