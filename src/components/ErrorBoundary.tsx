@@ -17,6 +17,10 @@ interface State {
     name: string
 }
 
+// ChatGPT said there is a useErrorBoundary() hook now and there is not (yet).  
+// there is a package which sounds like it doesn't work too well.
+// https://www.npmjs.com/package/react-use-error-boundary
+
 class ErrorBoundary extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);

@@ -1,12 +1,16 @@
 import { Dispatch, FC, SetStateAction, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { useOutletContext } from "react-router-dom"
+import { firstBreadcrumb } from "../reducers/BreadcrumbsSlice"
 
 const BaconIpsum: FC = () => {
+    const dispatch = useDispatch()
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
 
     useEffect(() => {
         setPageTitle('Bacon Ipsum')
-    }, [setPageTitle])
+        dispatch(firstBreadcrumb({title:'Bacon Ipsum', url: 'baconipsum'}))
+    }, [setPageTitle, dispatch])
 
     return (
         <>

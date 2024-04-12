@@ -1,12 +1,16 @@
 import { Grid, TextField, Typography } from "@mui/material"
 import { Dispatch, FC, SetStateAction, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { useOutletContext } from "react-router-dom"
+import { firstBreadcrumb } from "../reducers/BreadcrumbsSlice"
 
 const GridExample: FC = () => {
+    const dispatch = useDispatch()
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
 
     useEffect(() => {
         setPageTitle('Grid Example')
+        dispatch(firstBreadcrumb({title:'Grid Example', url: '/gridexample'}))
     }, [setPageTitle])
 
     // no need to use <></> as it is only one parent component to return.

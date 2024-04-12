@@ -1,13 +1,17 @@
 import { Grid, TextField, Typography } from "@mui/material"
 import { Dispatch, FC, SetStateAction, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { useOutletContext } from "react-router-dom"
+import { firstBreadcrumb } from "../reducers/BreadcrumbsSlice"
 
 const ExampleTwo: FC = () => {
+    const dispatch = useDispatch()
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
 
     useEffect(() => {
         setPageTitle('Example Two')
-    }, [setPageTitle])
+        dispatch(firstBreadcrumb({title:'Example Two', url: '/exampletwo'}))
+    }, [setPageTitle, dispatch])
 
     return (
         <>

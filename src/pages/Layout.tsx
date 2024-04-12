@@ -1,7 +1,7 @@
 import { FC, Fragment, useState } from "react"
 import { Outlet, Link } from "react-router-dom"
 import PrivateRoute from "../components/PrivateRoute"
-import { AppBar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
@@ -11,6 +11,7 @@ import TableRowsIcon from '@mui/icons-material/TableRows';
 import { MenuOption } from "../models/MenuOption";
 import { JwtField, JwtRole } from "../models/Jwt";
 import { jwtUtil } from "../wrappers/JwtUtil"
+import { Breadcrumbinator } from "../components/Breadcruminator";
 
 const drawerWidth = 200
 let lastRole = JwtRole.Any
@@ -117,6 +118,9 @@ const Layout: FC = () => {
                     sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
                 >
                     <Toolbar />
+                    <Grid item paddingBottom={2}>
+                        <Breadcrumbinator/>
+                    </Grid>
                     <Outlet context={setPageTitle} />
                 </Box>
             </Box>

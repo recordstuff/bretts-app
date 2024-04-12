@@ -4,8 +4,9 @@ import { userClient } from "../services/UserClient"
 import { PaginationResult, emptyPaginationResult } from "../models/PaginationResult"
 import { DisplayedUser } from "../models/DisplayedUser"
 import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
+import { firstBreadcrumb } from "../reducers/BreadcrumbsSlice"
 import { useDispatch } from "react-redux"
-import { Button, Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Grid, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import OptionFilter from "../components/OptionFilter"
 import { JwtRole } from "../models/Jwt"
 import Paginator from "../components/Paginator"
@@ -35,8 +36,9 @@ const Users: FC = () => {
 
     useEffect(() => {
         setPageTitle('Users')
+        dispatch(firstBreadcrumb({title:'Users', url: '/users'}))
         getUsers()
-    }, [setPageTitle, getUsers])
+    }, [setPageTitle, dispatch, getUsers])
 
     return (
         <>

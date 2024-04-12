@@ -1,12 +1,17 @@
 import { Dispatch, FC, SetStateAction, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { useOutletContext } from "react-router-dom"
+import { atHome } from "../reducers/BreadcrumbsSlice"
 
 const Home: FC = () => {
+    const dispatch = useDispatch()
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
 
     useEffect(() => {
         setPageTitle('Home')
-    }, [setPageTitle])
+        dispatch(atHome())
+        
+    }, [setPageTitle, dispatch])
 
     return (
         <>

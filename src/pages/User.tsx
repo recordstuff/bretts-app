@@ -6,6 +6,7 @@ import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 import { useDispatch } from "react-redux"
 import { Button, Stack, TextField } from "@mui/material"
 import { useParams } from "react-router-dom";
+import { addBreadcrumb } from "../reducers/BreadcrumbsSlice"
 
 const User: FC = () => {
     
@@ -25,7 +26,19 @@ const User: FC = () => {
     }, [dispatch, id])
 
     useEffect(() => {
-        setPageTitle(id === undefined ? 'Add User' : 'Edit User')
+        let pageTitle
+        let url = '/user'
+        
+        if (id === undefined) {
+            pageTitle = 'Add User'
+        }
+        else {
+            pageTitle = 'Edit User'
+            url = `${url}/${id}`
+        }
+
+        setPageTitle(pageTitle)
+        dispatch(addBreadcrumb({title: pageTitle, url}))
         getUser()
     }, [id, setPageTitle, getUser])
 
