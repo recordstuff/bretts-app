@@ -15,6 +15,15 @@ const initialState: BreadcrumbState = {
     visitedPages: [],
 }
 
+const isLastBreadcrumb = (visitedPages: VisitedPage[], pageToCheck: VisitedPage): boolean => {
+    if (visitedPages.length === 0) return false
+     
+    const lastBreadcrumb =  visitedPages[visitedPages.length - 1]
+
+    return lastBreadcrumb.title === pageToCheck.title
+        && lastBreadcrumb.url === lastBreadcrumb.url
+}
+
 export const BreadcrumbsSlice = createSlice({
     name: 'breadcrumbs',
     initialState : () => {
@@ -38,6 +47,8 @@ export const BreadcrumbsSlice = createSlice({
             localStorage.setItem(SESSION_KEY, JSON.stringify(state))
         },
         addBreadcrumb: (state, action: PayloadAction<VisitedPage>) => {
+            if (isLastBreadcrumb(state.visitedPages, action.payload)) return 
+
             state.visitedPages.push(action.payload)
             localStorage.setItem(SESSION_KEY, JSON.stringify(state))            
         },

@@ -1,7 +1,7 @@
 import { FC, Fragment, useState } from "react"
 import { Outlet, Link } from "react-router-dom"
 import PrivateRoute from "../components/PrivateRoute"
-import { AppBar, Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material"
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
@@ -63,20 +63,20 @@ const Layout: FC = () => {
             <Box sx={{ display: 'flex' }}>
                 <AppBar
                     position="fixed"
-                    sx={{ 
-                        width: `calc(100% - ${drawerWidth}px)`, 
-                        ml: `${drawerWidth}px` 
+                    sx={{
+                        width: `calc(100% - ${drawerWidth}px)`,
+                        ml: `${drawerWidth}px`
                     }}
                 >
                     <Toolbar>
                         <Typography variant="h6" noWrap component="div">
                             {pageTitle}
                         </Typography>
-                        <Box sx={{marginLeft: 'auto'}}>
-                        {localStorage.getItem(JwtField.DisplayName)}
-                        <a href="/login" title='Go back to the login screen.'>
-                            <Typography sx={{fontSize: '.9em'}}>Logout</Typography>
-                        </a>
+                        <Box sx={{ marginLeft: 'auto' }}>
+                            {localStorage.getItem(JwtField.DisplayName)}
+                            <a href="/login" title='Go back to the login screen.'>
+                                <Typography sx={{ fontSize: '.9em' }}>Logout</Typography>
+                            </a>
                         </Box>
                     </Toolbar>
                 </AppBar>
@@ -94,12 +94,12 @@ const Layout: FC = () => {
                 >
                     <List> {/* notice the use of Fragment vs <></> since we need the key property */}
                         {menuOptions.map((menuOption) => {
-                            let component =  jwtUtil.hasRole(menuOption.Role) ? (
-                                <Fragment key={menuOption.Text}>
-                                    {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider/>}
-                                    <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link'>
-                                        <ListItemButton selected={menuOption.Route === window.location.pathname 
-                                                               || menuOption.ChildRoutes?.some(cr => window.location.pathname.startsWith(cr))}>
+                            let component = jwtUtil.hasRole(menuOption.Role) ? (
+                                <Fragment key={`fragment${menuOption.Text}`}>
+                                    {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider key={`divider${menuOption.Text}`} />}
+                                    <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link' key={menuOption.Text}>
+                                        <ListItemButton selected={menuOption.Route === window.location.pathname
+                                            || menuOption.ChildRoutes?.some(cr => window.location.pathname.startsWith(cr))}>
                                             <ListItemIcon>
                                                 <menuOption.Icon />
                                             </ListItemIcon>
@@ -117,11 +117,11 @@ const Layout: FC = () => {
                     component="main"
                     sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
                 >
-                    <Toolbar />
-                    <Grid item paddingBottom={2}>
-                        <Breadcrumbinator/>
-                    </Grid>
-                    <Outlet context={setPageTitle} />
+                    <Stack>
+                        <Toolbar />
+                        <Breadcrumbinator />
+                        <Outlet context={setPageTitle} />
+                    </Stack>
                 </Box>
             </Box>
         </PrivateRoute>

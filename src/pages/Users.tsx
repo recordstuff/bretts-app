@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from "
 import { Link, useOutletContext } from "react-router-dom"
 import { userClient } from "../services/UserClient"
 import { PaginationResult, emptyPaginationResult } from "../models/PaginationResult"
-import { DisplayedUser } from "../models/DisplayedUser"
+import { UserSummary } from "../models/UserSummary"
 import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 import { firstBreadcrumb } from "../reducers/BreadcrumbsSlice"
 import { useDispatch } from "react-redux"
@@ -19,7 +19,7 @@ const PAGE_SIZE = 5
 const Users: FC = () => {
     const dispatch = useDispatch()
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
-    const [paginationResult, setPaginationResult] = useState<PaginationResult<DisplayedUser>>(emptyPaginationResult())
+    const [paginationResult, setPaginationResult] = useState<PaginationResult<UserSummary>>(emptyPaginationResult())
     const [page, setPage] = useState(1)
     const [searchText, setSearchText] = useState('')
     const [roleFilter, setRoleFilter] = useState<JwtRole>(JwtRole.Any)
@@ -42,7 +42,7 @@ const Users: FC = () => {
 
     return (
         <>
-        <Grid item marginBottom={2} marginLeft={-1}>
+        <Grid item marginBottom={2} marginLeft={-1} marginTop={1}>
         <IconButton component={Link} to='/user' sx={{paddingBottom: '-1'}}>
                 <AddIcon/><Typography variant='body2'>Add User</Typography>
             </IconButton>
@@ -63,8 +63,8 @@ const Users: FC = () => {
                             { Name: 'User', Value: JwtRole.User },
                             { Name: 'Admin', Value: JwtRole.Admin },
                         ]}
-                        filterOption={roleFilter}
-                        setFilterOption={setRoleFilter}
+                        selectedValue={roleFilter}
+                        setSelectedValue={setRoleFilter}
                     />
                     } />
                 <TableContainer component={Paper}>
@@ -86,7 +86,7 @@ const Users: FC = () => {
                             {paginationResult.Items.map((row, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <Link to={`/user/${row.UserGuid}`}>{row.UserGuid}</Link>
+                                        <Link to={`/user/${row.Guid}`}>{row.Guid}</Link>
                                     </TableCell>
                                     <TableCell>
                                         {row.DisplayName}

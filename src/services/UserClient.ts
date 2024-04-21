@@ -1,8 +1,9 @@
 import { JwtRole } from "../models/Jwt";
 import { PaginationResult } from "../models/PaginationResult";
-import { DisplayedUser } from "../models/DisplayedUser";
+import { UserSummary } from "../models/UserSummary";
 import { UserCredentials } from "../models/UserCredentials";
 import { HttpClient } from "./HttpClient";
+import { UserDetail } from "../models/UserDetail";
 
 class UserClient extends HttpClient {
     constructor() {
@@ -18,12 +19,20 @@ class UserClient extends HttpClient {
         pageSize: number,
         searchText: string | null = null,
         roleFilter: JwtRole = JwtRole.Any
-    ): Promise<PaginationResult<DisplayedUser>> {
-        return this.get<PaginationResult<DisplayedUser>>('users', {page, pageSize, searchText, roleFilter})
+    ): Promise<PaginationResult<UserSummary>> {
+        return this.get<PaginationResult<UserSummary>>('users', {page, pageSize, searchText, roleFilter})
     }
 
-    public getUser(id: string): Promise<DisplayedUser> {
-        return this.get<DisplayedUser>(`user/${id}`)
+    public getUser(id: string): Promise<UserDetail> {
+        return this.get<UserDetail>(`user/${id}`)
+    }
+
+    public updateUser(userDetail: UserDetail): Promise<UserDetail> {
+        return this.post<UserDetail, UserDetail>('update', userDetail)
+    }
+
+    public insertUser(userDetail: UserDetail): Promise<UserDetail> {
+        return this.post<UserDetail, UserDetail>('insert', userDetail)
     }
 }
 

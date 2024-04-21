@@ -1,23 +1,19 @@
 import { Dispatch, FC, SetStateAction, useEffect, useId } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-
-export interface FilterOption<T> {
-    Name: string,
-    Value: T
-}
+import { NameValuePair } from '../models/NameValuePair';
 
 export interface Props<T> {
     label: string,
-    options: FilterOption<T>[],
-    setFilterOption: Dispatch<SetStateAction<T>>,
-    filterOption: T,
+    options: NameValuePair<T>[],
+    setSelectedValue: Dispatch<SetStateAction<T>>,
+    selectedValue: T,
 }
 
-function OptionFilter<T>({ options, label, setFilterOption, filterOption }: Props<T>) {
+function OptionFilter<T>({ options, label, setSelectedValue, selectedValue }: Props<T>) {
     const labelId = useId();
 
     const handleChange = (event: SelectChangeEvent) => {
-        setFilterOption(event.target.value as T)
+        setSelectedValue(event.target.value as T)
     }
 
     return (
@@ -27,7 +23,7 @@ function OptionFilter<T>({ options, label, setFilterOption, filterOption }: Prop
                 labelId={labelId}
                 label={label}
                 onChange={handleChange}
-                value={`${filterOption}`}
+                value={`${selectedValue}`}
             >
                 {options.map((row, index) => (
                     <MenuItem key={index} value={`${row.Value}`}>{row.Name}</MenuItem>

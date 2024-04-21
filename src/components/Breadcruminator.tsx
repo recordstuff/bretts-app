@@ -7,22 +7,22 @@ import { Link } from "react-router-dom"
 export const Breadcrumbinator: FC = () => {
     const breadcrumbs = useSelector((state: RootState) => state.breadcrumbs.visitedPages)
 
-    return (
-        <Breadcrumbs>
+    return (    
+        <Breadcrumbs sx={{paddingBottom: 1}}>
             <Link to='/'>
                 Home
             </Link>
             {breadcrumbs.map((page, index) => {
                 if (index === breadcrumbs.length - 1) {
                     return (
-                        <Typography>
+                        <Typography key={index}>
                             {page.title}
                         </Typography>
                     )
                 }
                 else {
                     return (
-                        <Link to={page.url}>
+                        <Link to={page.url} key={index}>
                             {page.title}
                         </Link>
                     )

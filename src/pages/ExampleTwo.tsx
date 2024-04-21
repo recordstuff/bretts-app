@@ -15,7 +15,7 @@ const ExampleTwo: FC = () => {
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} marginTop={.1}>
                 <Grid item lg={12} xl={10}>
                     <Typography variant="h6">First Set of Fields</Typography>
                 </Grid>
