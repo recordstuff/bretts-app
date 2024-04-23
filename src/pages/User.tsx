@@ -5,11 +5,12 @@ import { userClient } from "../services/UserClient"
 import { UserDetail, emptyUserDetail } from "../models/UserDetail"
 import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 import { useDispatch } from "react-redux"
-import { Button, Stack, TextField } from "@mui/material"
+import { Button, Stack, TextField, Typography } from "@mui/material"
 import { useParams } from "react-router-dom";
 import { addBreadcrumb } from "../reducers/BreadcrumbsSlice"
 import ItemsSelector from "../components/ItemsSelector"
 import { NameGuidPair } from "../models/NameGuidPair"
+import { useNavigate } from 'react-router-dom';
 
 const User: FC = () => {
 
@@ -18,6 +19,7 @@ const User: FC = () => {
     const [roles, setRoles] = useState<NameGuidPair[]>([])
     const [user, setUser] = useState<UserDetail>(emptyUserDetail())
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const getRoles = useCallback(async (): Promise<void> => {
         dispatch(pleaseWait())
@@ -71,28 +73,30 @@ const User: FC = () => {
         dispatch(doneWaiting())
     }
 
+    const handleCancel = (): void => {
+        if (id === undefined) {
+            navigate(-1)
+        }
+        else {
+            getUser()
+        }
+    }
+
     return (
         <Stack margin={2} spacing={4}>
-            {/* 
-                no add, only update works
-                punted on form layout too
-                no vaidation yet, show login
-                no email validation yet (client plus server side and wrap in EmailField component)
-                use snackbar toasts, wrap in component? (show login)
-             */}
             <TextField fullWidth label="Id" value={user.Guid} disabled />
             <TextField fullWidth label="Display Name" name='DisplayName' onChange={handleChange} value={user.DisplayName} />
             <TextField fullWidth label="Email" name='Email' onChange={handleChange} value={user.Email} />
             <TextField fullWidth label="Phone" name='Phone' onChange={handleChange} value={user.Phone} />
-            <Stack direction='row' spacing={2}>
-                <Button onClick={upsert} color='primary' variant="contained">{id === undefined ? 'Add' : 'Save'}</Button>
-                <Button>Cancel</Button>
-            </Stack>
             <ItemsSelector
                 label="Roles"
                 allItems={roles}
                 initiallySelectedItems={user.Roles}
             />
+            <Stack direction='row' spacing={2}>
+                <Button onClick={upsert} color='primary' variant="contained">{id === undefined ? 'Add' : 'Save'}</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
+            </Stack>
         </Stack>
     )
 }

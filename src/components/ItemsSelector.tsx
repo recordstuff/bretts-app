@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { NameGuidPair } from '../models/NameGuidPair';
 import FilteredList from './FilteredList';
-import { Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 
 export interface Props {
     allItems: NameGuidPair[]
@@ -20,23 +20,29 @@ const ItemsSelector: FC<Props> = ({ allItems, initiallySelectedItems, label }) =
     }, [allItems, initiallySelectedItems])
 
     return (
-        <>
-            <Typography>{label}</Typography>
-            <Grid container>
-                <Grid item>
-                    <FilteredList
-                        label='Available'
-                        items={available}
-                    />
-                </Grid>
-                <Grid item>
+            <Box>
+            <Typography paddingTop={1} paddingBottom={.5}>{label}</Typography>
+            <Grid container direction='row'>
+            <Grid item sm={12} md={5}>
                     <FilteredList
                         label='Selected'
                         items={selected}
                     />
                 </Grid>
+                <Grid item sm={12} md={2}>
+                    <Stack spacing={2} padding={2}>
+                    <Button variant='outlined'>{'>>'}</Button>
+                    <Button variant='outlined'>{'<<'}</Button>
+                    </Stack>
+                </Grid>
+                <Grid item sm={12} md={5}>
+                    <FilteredList
+                        label='Available'
+                        items={available}
+                    />
+                </Grid>
             </Grid>
-        </>
+            </Box>
     )
 }
 

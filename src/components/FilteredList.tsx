@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { List, ListItem, Stack } from '@mui/material';
+import { Box, List, ListItem, ListItemButton, ListSubheader, Stack } from '@mui/material';
 import TextFilter from './TextFilter';
 import { NameGuidPair } from '../models/NameGuidPair';
 
@@ -12,17 +12,19 @@ const FilteredList: FC<Props> = ({ label, items }) => {
     const [searchText, setSearchText] = useState('')
 
     return (
-        <Stack>
+        <Box>
             <TextFilter
-                label={`${label} Filter`} searchText={searchText} setSearchText={setSearchText} />
-            <List>
+                label={`Filter ${label}`} searchText={searchText} setSearchText={setSearchText} />
+            <List
+            
+            >
                 {items.map((item) => (
-                    <ListItem
+                    <ListItemButton
                         key={item.Guid}>
                         {item.Name}
-                    </ListItem>))}
+                    </ListItemButton>))}
             </List>
-        </Stack>
+        </Box>
     )
 }
 
