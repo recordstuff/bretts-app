@@ -96,8 +96,8 @@ const Layout: FC = () => {
                         {menuOptions.map((menuOption) => {
                             let component = jwtUtil.hasRole(menuOption.Role) ? (
                                 <Fragment key={`fragment${menuOption.Text}`}>
-                                    {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider key={`divider${menuOption.Text}`} />}
-                                    <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link' key={menuOption.Text}>
+                                    {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider />}
+                                    <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link' >
                                         <ListItemButton selected={menuOption.Route === window.location.pathname
                                             || menuOption.ChildRoutes?.some(cr => window.location.pathname.startsWith(cr))}>
                                             <ListItemIcon>
@@ -107,7 +107,7 @@ const Layout: FC = () => {
                                         </ListItemButton>
                                     </ListItem>
                                 </Fragment>
-                            ) : <></>
+                            ) : null // fragment shorthand does not work here (listitem key)
                             lastRole = menuOption.Role
                             return component
                         })}

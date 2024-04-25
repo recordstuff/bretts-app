@@ -21,7 +21,7 @@ const isLastBreadcrumb = (visitedPages: VisitedPage[], pageToCheck: VisitedPage)
     const lastBreadcrumb =  visitedPages[visitedPages.length - 1]
 
     return lastBreadcrumb.title === pageToCheck.title
-        && lastBreadcrumb.url === lastBreadcrumb.url
+        && lastBreadcrumb.url === pageToCheck.url
 }
 
 export const BreadcrumbsSlice = createSlice({

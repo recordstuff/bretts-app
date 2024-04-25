@@ -1,4 +1,4 @@
-import { ENCODED_TOKEN_NAME, Jwt, JwtField, JwtRole } from "../models/Jwt"
+import { ENCODED_TOKEN_NAME, JwtField, JwtRole } from "../models/Jwt"
 
 class JwtUtil {
     public get isExpired() : boolean {
@@ -36,29 +36,33 @@ class JwtUtil {
                     body = body.padEnd(padding)
                 }
 
-                const jwt: Jwt = new Map()
+/*              const jwt: Jwt = new Map()
                 const fields = Object.entries(JSON.parse(atob(body)))
 
                 for (const [key, value] of fields) {
                     jwt.set(key as JwtField, value as string | number | string[])
                 }
 
-                const expriationSeconds = jwt.get(JwtField.ExpirationSeconds) as string
-
+                const expirationSeconds = jwt.get(JwtField.ExpirationSeconds) as string
                 let roles = jwt.get(JwtField.Roles)
+                const displayName: string = jwt.get(JwtField.DisplayName) as string
+*/
+                const jwt: Record<JwtField, string | number | string[]> = JSON.parse(atob(body))
+                
+                const expirationSeconds = jwt[JwtField.ExpirationSeconds] as string
+                const displayName = jwt[JwtField.DisplayName] as string
+
+                let roles = jwt[JwtField.Roles]
 
                 if (typeof roles === 'string')
                 {
                     roles = [roles]                    
                 }
 
-                const displayName: string = jwt.get(JwtField.DisplayName) as string
-
-                if (expriationSeconds !== undefined 
-                 && roles !== undefined) {
+                if (expirationSeconds !== undefined && roles !== undefined && displayName !== undefined) {
                     localStorage.setItem(ENCODED_TOKEN_NAME, encodedToken)
                     localStorage.setItem(JwtField.DisplayName, displayName)                    
-                    localStorage.setItem(JwtField.ExpirationSeconds, expriationSeconds)
+                    localStorage.setItem(JwtField.ExpirationSeconds, expirationSeconds)
                     localStorage.setItem(JwtField.Roles, JSON.stringify(roles))         
                     return
                 }
