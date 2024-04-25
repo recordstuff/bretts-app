@@ -3,14 +3,17 @@ import { useOutletContext } from "react-router-dom"
 import { roleClient } from "../services/RoleClient"
 import { userClient } from "../services/UserClient"
 import { UserDetail, emptyUserDetail } from "../models/UserDetail"
-import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
+import { clearAllWaits, doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 import { useDispatch } from "react-redux"
-import { Button, Stack, TextField, Typography } from "@mui/material"
+import { Button, Stack, TextField } from "@mui/material"
 import { useParams } from "react-router-dom";
 import { addBreadcrumb } from "../reducers/BreadcrumbsSlice"
 import ItemsSelector from "../components/ItemsSelector"
 import { NameGuidPair } from "../models/NameGuidPair"
 import { useNavigate } from 'react-router-dom';
+import { UserNew } from "../models/UserNew"
+import { AxiosError } from "axios"
+import { HTTP_STATUS_CODES } from "../services/HttpClient"
 
 const User: FC = () => {
 
@@ -18,6 +21,9 @@ const User: FC = () => {
     const setPageTitle: Dispatch<SetStateAction<string>> = useOutletContext()
     const [roles, setRoles] = useState<NameGuidPair[]>([])
     const [user, setUser] = useState<UserDetail>(emptyUserDetail())
+    const [password, setPassword] = useState<string>('')
+    const [selectedRoles, setSelectedRoles] = useState<NameGuidPair[]>([])
+
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -58,17 +64,44 @@ const User: FC = () => {
     }, [id, setPageTitle, dispatch, getRoles, getUser])
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        if (event.target.name === 'Password') {
+            setPassword(event.target.value)
+            return;
+        }
+
         let newUser = { ...user }
         newUser[event.target.name as keyof UserDetail] = event.target.value as any
         setUser(newUser)
     }
 
     const upsert = async (): Promise<void> => {
-        if (id === undefined) return
-
         dispatch(pleaseWait())
 
-        setUser(await userClient.updateUser(user))
+        if (id === undefined) {
+            const newUser: UserNew = { ...user, Password: password }
+            newUser.Roles = selectedRoles
+
+            try {
+                const userDetail = await userClient.insertUser(newUser)
+                navigate(`/user/${userDetail.Guid}`)
+            }
+            catch (ex: unknown) {
+                dispatch(clearAllWaits())
+                if (ex instanceof AxiosError 
+                 && ex.response?.status === HTTP_STATUS_CODES.CONFLICT) {
+                    // email already exists
+                    return
+                }
+
+                throw ex                
+            }
+        }
+        else {
+            const newUser = { ...user }
+            newUser.Roles = selectedRoles
+            
+            setUser(await userClient.updateUser(newUser))
+        }
 
         dispatch(doneWaiting())
     }
@@ -82,20 +115,27 @@ const User: FC = () => {
         }
     }
 
+    const handleDelete = (): void => {
+    }
+
     return (
         <Stack margin={2} spacing={4}>
-            <TextField fullWidth label="Id" value={user.Guid} disabled />
+            {id !== undefined && <TextField fullWidth label="Id" value={user.Guid} disabled />}
             <TextField fullWidth label="Display Name" name='DisplayName' onChange={handleChange} value={user.DisplayName} />
             <TextField fullWidth label="Email" name='Email' onChange={handleChange} value={user.Email} />
             <TextField fullWidth label="Phone" name='Phone' onChange={handleChange} value={user.Phone} />
+            {id === undefined && <TextField fullWidth label="Password" name='Password' onChange={handleChange} value={password} />}
             <ItemsSelector
                 label="Roles"
                 allItems={roles}
                 initiallySelectedItems={user.Roles}
+                selected={selectedRoles}
+                setSelected={setSelectedRoles}
             />
             <Stack direction='row' spacing={2}>
                 <Button onClick={upsert} color='primary' variant="contained">{id === undefined ? 'Add' : 'Save'}</Button>
-                <Button onClick={handleCancel}>Cancel</Button>
+                <Button color="secondary" onClick={handleCancel}>Cancel</Button>
+                {id !== undefined && <Button variant="contained" color="error" onClick={handleDelete}>Delete</Button>}
             </Stack>
         </Stack>
     )

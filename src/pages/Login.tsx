@@ -5,7 +5,7 @@ import { jwtUtil } from "../wrappers/JwtUtil"
 import { defaultUserCredentials, UserCredentials } from "../models/UserCredentials"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux"
-import { doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
+import { clearAllWaits, doneWaiting, pleaseWait } from "../reducers/WaitSpinnerSlice"
 import { AxiosError } from "axios"
 import { userClient } from "../services/UserClient"
 
@@ -34,7 +34,7 @@ const Layout: FC = () => {
             }
         }
         catch (ex: unknown) {
-            dispatch(doneWaiting())
+            dispatch(clearAllWaits())
             if (ex instanceof AxiosError && ex.response?.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
                 setIsInvalidCredentials(true)
                 return

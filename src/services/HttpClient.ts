@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from "ax
 import { ENCODED_TOKEN_NAME } from "../models/Jwt"
 
 export enum HTTP_STATUS_CODES {
+    CONFLICT = 409,
     FORBIDDEN = 403,
     UNAUTHORIZED = 401
 }

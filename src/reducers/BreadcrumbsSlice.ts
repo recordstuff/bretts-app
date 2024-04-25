@@ -42,7 +42,6 @@ export const BreadcrumbsSlice = createSlice({
             localStorage.setItem(SESSION_KEY, JSON.stringify(state))
         },
         firstBreadcrumb: (state, action: PayloadAction<VisitedPage>) => {
-            // code in here is converted to immutable code for you by redux toolkit
             state.visitedPages = [action.payload]
             localStorage.setItem(SESSION_KEY, JSON.stringify(state))
         },

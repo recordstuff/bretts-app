@@ -4,6 +4,7 @@ import { UserSummary } from "../models/UserSummary";
 import { UserCredentials } from "../models/UserCredentials";
 import { HttpClient } from "./HttpClient";
 import { UserDetail } from "../models/UserDetail";
+import { UserNew } from "../models/UserNew";
 
 class UserClient extends HttpClient {
     constructor() {
@@ -31,8 +32,8 @@ class UserClient extends HttpClient {
         return this.post<UserDetail, UserDetail>('update', userDetail)
     }
 
-    public insertUser(userDetail: UserDetail): Promise<UserDetail> {
-        return this.post<UserDetail, UserDetail>('insert', userDetail)
+    public insertUser(userNew: UserNew): Promise<UserDetail> {
+        return this.post<UserNew, UserDetail>('insert', userNew)
     }
 }
 
