@@ -95,7 +95,7 @@ const Layout: FC = () => {
                     <List> {/* notice the use of Fragment vs <></> since we need the key property */}
                         {menuOptions.map((menuOption) => {
                             let component = jwtUtil.hasRole(menuOption.Role) ? (
-                                <Fragment key={`fragment${menuOption.Text}`}>
+                                <Fragment key={menuOption.Text}>
                                     {menuOption.Role === JwtRole.Admin && lastRole === JwtRole.User && <Divider />}
                                     <ListItem disablePadding component={Link} to={menuOption.Route} className='menu-link' >
                                         <ListItemButton selected={menuOption.Route === window.location.pathname
