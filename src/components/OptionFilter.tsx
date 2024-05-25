@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useEffect, useId } from 'react';
+import { Dispatch, SetStateAction, useId } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { NameValuePair } from '../models/NameValuePair';
 
@@ -9,7 +9,7 @@ export interface Props<T> {
     selectedValue: T,
 }
 
-function OptionFilter<T>({ options, label, setSelectedValue, selectedValue }: Props<T>) {
+function OptionFilter<T>({ options, label, setSelectedValue, selectedValue }: Props<T>): JSX.Element {
     const labelId = useId();
 
     const handleChange = (event: SelectChangeEvent) => {
